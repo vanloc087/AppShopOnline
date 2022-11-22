@@ -8,14 +8,48 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import listSanPham from "../data/sanpham";
+
 import { Searchbar } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomeSectionComponent from "../components/HomeSectionComponents";
 
+const creatListDienThoai_Ipad = () => {
+  let sanPhams = new Array();
+  listSanPham.forEach((element) => {
+    if (element.loai == "smartPhone" || element.loai == "ipad") {
+      sanPhams.push(element);
+    }
+  });
+  return sanPhams;
+};
+const creatListPhuKien = () => {
+  let sanPhams = new Array();
+  listSanPham.forEach((element) => {
+    if (element.loai == "backupChanger" || element.loai == "headPhone") {
+      sanPhams.push(element);
+    }
+  });
+  return sanPhams;
+};
+const creatListSPKhac = () => {
+  let sanPhams = new Array();
+  listSanPham.forEach((element) => {
+    if (element.loai == "watch") {
+      sanPhams.push(element);
+    }
+  });
+  return sanPhams;
+};
 const HomeScreen = () => {
+  let listDienThoaiIpad = creatListDienThoai_Ipad();
+  let listPhuKien = creatListPhuKien();
+  let listSPKhac = creatListSPKhac();
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const onChangeSearch = (query) => setSearchQuery(query);
+  const section_banner_sanphamchinh = require("../assets/section_banner.png");
+
   return (
     <View style={styles.screenContainer}>
       <StatusBar barStyle="light-content" />
@@ -41,10 +75,24 @@ const HomeScreen = () => {
       {/*  */}
       <View style={styles.bodyContainer}>
         <ScrollView>
-          <HomeSectionComponent />
-          <HomeSectionComponent />
-          <HomeSectionComponent />
-          <HomeSectionComponent />
+          <HomeSectionComponent
+            data={listDienThoaiIpad}
+            danhmuc={["Tất cả", "Điện thoại SmartPhone", "Máy tính Bảng"]}
+            title={"Điện thoại - Máy tính bảng"}
+            banner={section_banner_sanphamchinh}
+          />
+          <HomeSectionComponent
+            data={listPhuKien}
+            danhmuc={["Tất cả", "Tai nghe", "Sạc dự phòng"]}
+            title={"Phụ kiện"}
+            banner={section_banner_sanphamchinh}
+          />
+          <HomeSectionComponent
+            data={listSPKhac}
+            danhmuc={["Tất cả"]}
+            title={"Sản phẩm khác"}
+            banner={section_banner_sanphamchinh}
+          />
         </ScrollView>
       </View>
     </View>

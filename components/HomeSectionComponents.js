@@ -11,24 +11,22 @@ import {
 import { useState, useEffect } from "react";
 
 const { width } = Dimensions.get("window");
-
-const section_banner = require("../assets/section_banner.png");
 const item_image_1 = require("../assets/item_image_1.png");
 const item_image_2 = require("../assets/item_image_2.png");
 const item_image_3 = require("../assets/item_image_3.png");
 const item_image_4 = require("../assets/item_image_4.png");
-
-const ProductItem = ({ image, name, price }) => (
+const ProductItem = ({ image, name, price, discount }) => (
   <View style={styles.itemContainer}>
     <Image source={image} style={styles.itemImage} />
     <Text style={styles.itemName} numberOfLines={2}>
       {name}
     </Text>
     <Text style={styles.itemPrice}>{price}</Text>
+    <Text style={styles.itemDiscount}>{discount}</Text>
   </View>
 );
 
-const HomeSectionComponent = () => {
+const HomeSectionComponent = (props) => {
   const [clickBtn1, setClickBtn1] = useState(true);
   const [clickBtn2, setClickBtn2] = useState(false);
   const [clickBtn3, setClickBtn3] = useState(false);
@@ -42,12 +40,13 @@ const HomeSectionComponent = () => {
       setData(listData.filter((x) => x.type === type));
     }
   };
+
   return (
     <View style={styles.sectionContainer}>
       {/*  */}
-      <Text style={styles.sectionTitle}>Điện thoại - Máy tính bảng</Text>
+      <Text style={styles.sectionTitle}>{props.title}</Text>
       {/*  */}
-      <Image source={section_banner} style={styles.sectionImage} />
+      <Image source={props.banner} style={styles.sectionImage} />
       {/*  */}
       <ScrollView horizontal={true}>
         <View style={styles.filterContainer}>
@@ -160,31 +159,24 @@ const HomeSectionComponent = () => {
       {/*  */}
       <ScrollView horizontal={true}>
         <View style={styles.listItemContainer}>
-          {[
-            { image1: item_image_1, image2: item_image_2 },
-            { image1: item_image_2, image2: item_image_3 },
-            { image1: item_image_4, image2: item_image_1 },
-            { image1: item_image_1, image2: item_image_2 },
-          ].map((e, index) => (
-            <View key={index.toString()}>
+          {props.data.map((item) => (
+            <TouchableOpacity>
               <ProductItem
-                name="Điện thoại Vsmart Bee (Smart Bee)"
-                image={e.image1}
-                price="699.000đ"
+                name={item.ten}
+                image={item.hinhAnh.blue}
+                price={item.giaDeXuat}
+                discount={item.giaThuc}
               />
-              <ProductItem
-                name="Điện thoại Vsmart Joy 2 Vsmart Joy 2"
-                image={e.image2}
-                price="699.000đ"
-              />
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
       {/*  */}
-      <View style={styles.seeMoreContainer}>
-        <Text style={styles.seeMoreText}>XEM THÊM 636 SẢN PHẨM {">>>"} </Text>
-      </View>
+      <TouchableOpacity style={styles.seeMoreContainer}>
+        <Text style={styles.seeMoreText}>
+          XEM THÊM {props.data.length} SẢN PHẨM {">>>"}{" "}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -248,14 +240,21 @@ const styles = StyleSheet.create({
     height: 120,
   },
   itemName: {
+    height: 35,
     fontSize: 14,
     color: "#484848",
     marginVertical: 4,
   },
   itemPrice: {
+    fontSize: 10,
+    fontWeight: "1",
+    color: "#2a2a2a",
+    textDecorationLine: "line-through",
+  },
+  itemDiscount: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#2a2a2a",
+    color: "red",
   },
   //
   seeMoreContainer: {
